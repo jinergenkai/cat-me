@@ -2,21 +2,25 @@ import { MarketingConfig } from "types"
 
 export const marketingConfig: MarketingConfig = {
   mainNav: [
+    // {
+    //   title: "Tính năng",
+    //   href: "/#features",
+    // },
     {
-      title: "Features",
-      href: "/#features",
+      title: "Sáng tạo",
+      href: "/editor",
     },
     {
-      title: "Pricing",
+      title: "Dịch vụ",
       href: "/pricing",
     },
     {
-      title: "Blog",
+      title: "Bài viết",
       href: "/blog",
     },
-    {
-      title: "Documentation",
-      href: "/docs",
-    },
+    // {
+    //   title: "Documentation",
+    //   href: "/docs",
+    // },
   ],
 }
