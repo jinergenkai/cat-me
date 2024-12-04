@@ -36,6 +36,7 @@ EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({
   ...props
 }: EmptyPlaceholderIconProps) {
   const Icon = Icons[name]
+  // const Icon = Icons.spinner
 
   if (!Icon) {
     return null
@@ -43,7 +44,8 @@ EmptyPlaceholder.Icon = function EmptyPlaceHolderIcon({
 
   return (
     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
-      <Icon className={cn("h-10 w-10", className)} {...props} />
+      {/* <Icon className={cn("h-10 w-10", className)} {...props} /> */}
+      <Icon/>
     </div>
   )
 }
