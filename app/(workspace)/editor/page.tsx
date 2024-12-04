@@ -22,19 +22,19 @@ export default function MemeEditor() {
   }
 
   // List of tools
-  const { onReady, onAddCircle, onAddRectangle, addText, toggleDraw, clear,
-    undo, redo, toggleSize, removeSelectedObject, setCropImage, color,
-    setColor, exportSVG, fromSvg, cropImage, enablePanning, editor } = FabricCanvas();
+  // const { onReady, onAddCircle, onAddRectangle, addText, toggleDraw, clear,
+  //   undo, redo, toggleSize, removeSelectedObject, setCropImage, color,
+  //   setColor, exportSVG, fromSvg, cropImage, enablePanning, editor } = FabricCanvas();
   const tools = [
-    { name: "Gắn chữ", icon: Icons.type, func: addText },
-    { name: "Gắn nhãn", icon: Icons.sticker, func: onAddCircle },
+    // { name: "Gắn chữ", icon: Icons.type, func: addText },
+    // { name: "Gắn nhãn", icon: Icons.sticker, func: onAddCircle },
     // { name: "Add Filter", icon: null },
     { name: "Cắt", icon: Icons.cut, func: onFeatureUnderDevelopment },
     // { name: "Rotate", icon: "↩️" },
     { name: "Chỉnh khung", icon: Icons.crop, func: onFeatureUnderDevelopment },
     { name: "Xoay", icon: Icons.rotate, onFeatureUnderDevelopment },
     { name: "Thêm lớp", icon: Icons.layer, onFeatureUnderDevelopment },
-    { name: "lia vùng", icon: Icons.layer, func: () => enablePanning(editor?.canvas) },
+    // { name: "lia vùng", icon: Icons.layer, func: () => enablePanning(editor?.canvas) },
     // Add more tools as needed
   ];
 
@@ -44,7 +44,7 @@ export default function MemeEditor() {
       {/* Main Canvas */}
       <main className="h-[50%] bg-gray-50 p-4">
         <ChooseImageDialog />
-        <FabricJSCanvas className="h-[50%] w-full" onReady={onReady} />
+        {/* <FabricJSCanvas className="h-[50%] w-full" onReady={onReady} /> */}
         {/* <div className="h-[1000px]"></div> */}
       </main>
 
