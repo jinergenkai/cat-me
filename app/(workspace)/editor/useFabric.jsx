@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from "react";
-import { fabric } from "fabric";
+import  * as fabric from "fabric";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { Button } from "@/components/ui/button";
 
