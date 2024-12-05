@@ -67,9 +67,9 @@ export const metadata = {
     // icon: "/favicon.ico",
     // shortcut: "/favicon-16x16.png",
     // apple: "/apple-touch-icon.png",
-    icon: "/images/banner/logo.jpg",
-    shortcut: "/images/banner/logo.jpg",
-    apple: "/images/banner/logo.jpg",
+    icon: "/images/banner/logo.png",
+    shortcut: "/images/banner/logo.png",
+    apple: "/images/banner/logo.png",
   },
   // manifest: `${siteConfig.url}/site.webmanifest`,
 }

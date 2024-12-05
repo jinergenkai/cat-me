@@ -1,94 +1,113 @@
-'use client';
-import React, { useEffect, useState } from "react";
-import  * as fabric from "fabric";
-import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import React, { useEffect, useState } from "react"
+import * as fabric from "fabric"
+
+import { Button } from "@/components/ui/button"
+
+import { FabricJSCanvas, useFabricJSEditor } from "./fabric"
 
 export default function useFabric() {
-  const { editor, onReady } = useFabricJSEditor();
+  const { editor, onReady } = useFabricJSEditor()
 
-  const history = [];
-  const [color, setColor] = useState("#35363a");
-  const [cropImage, setCropImage] = useState(true);
+  const history = []
+  const [color, setColor] = useState("#35363a")
+  const [cropImage, setCropImage] = useState(true)
+  const [dimension, setDimension] = useState({ width: 400, height: 400 })
 
   useEffect(() => {
     if (!editor || !fabric) {
-      return;
+      return
     }
 
     if (cropImage) {
-      editor.canvas.__eventListeners = {};
-      return;
+      editor.canvas.__eventListeners = {}
+      return
     }
 
     if (!editor.canvas.__eventListeners["mouse:wheel"]) {
       editor.canvas.on("mouse:wheel", function (opt) {
-        var delta = opt.e.deltaY;
-        var zoom = editor.canvas.getZoom();
-        zoom *= 0.999 ** delta;
-        if (zoom > 20) zoom = 20;
-        if (zoom < 0.01) zoom = 0.01;
-        editor.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-        opt.e.preventDefault();
-        opt.e.stopPropagation();
-      });
+        var delta = opt.e.deltaY
+        var zoom = editor.canvas.getZoom()
+        zoom *= 0.999 ** delta
+        if (zoom > 20) zoom = 20
+        if (zoom < 0.01) zoom = 0.01
+        editor.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom)
+        opt.e.preventDefault()
+        opt.e.stopPropagation()
+      })
     }
 
     if (!editor.canvas.__eventListeners["mouse:down"]) {
       editor.canvas.on("mouse:down", function (opt) {
-        var evt = opt.e;
+        var evt = opt.e
         if (evt.ctrlKey === true) {
-          this.isDragging = true;
-          this.selection = false;
-          this.lastPosX = evt.clientX;
-          this.lastPosY = evt.clientY;
+          this.isDragging = true
+          this.selection = false
+          this.lastPosX = evt.clientX
+          this.lastPosY = evt.clientY
         }
-      });
+      })
     }
 
     if (!editor.canvas.__eventListeners["mouse:move"]) {
       editor.canvas.on("mouse:move", function (opt) {
         if (this.isDragging) {
-          var e = opt.e;
-          var vpt = this.viewportTransform;
-          vpt[4] += e.clientX - this.lastPosX;
-          vpt[5] += e.clientY - this.lastPosY;
-          this.requestRenderAll();
-          this.lastPosX = e.clientX;
-          this.lastPosY = e.clientY;
+          var e = opt.e
+          var vpt = this.viewportTransform
+          vpt[4] += e.clientX - this.lastPosX
+          vpt[5] += e.clientY - this.lastPosY
+          this.requestRenderAll()
+          this.lastPosX = e.clientX
+          this.lastPosY = e.clientY
         }
-      });
+      })
     }
 
     if (!editor.canvas.__eventListeners["mouse:up"]) {
       editor.canvas.on("mouse:up", function (opt) {
         // on mouse up we want to recalculate new interaction
         // for all objects, so we call setViewportTransform
-        this.setViewportTransform(this.viewportTransform);
-        this.isDragging = false;
-        this.selection = true;
-      });
+        this.setViewportTransform(this.viewportTransform)
+        this.isDragging = false
+        this.selection = true
+      })
     }
 
-    editor.canvas.renderAll();
-  }, [editor]);
+    editor.canvas.renderAll()
+  }, [editor])
 
-  const addBackground = () => {
+  const addBackground = async () => {
     if (!editor || !fabric) {
-      return;
+      return
     }
-
-    fabric.Image.fromURL(
-      // "https://thegraphicsfairy.com/wp-content/uploads/2019/02/Anatomical-Heart-Illustration-Black-GraphicsFairy.jpg",
-      "/images/banner/logo.jpg",
-      (image) => {
-        editor.canvas.setBackgroundImage(
-          image,
-          editor.canvas.renderAll.bind(editor.canvas)
-        );
-      }
+    const img = await fabric.FabricImage.fromURL(
+      "https://thegraphicsfairy.com/wp-content/uploads/2019/02/Anatomical-Heart-Illustration-Black-GraphicsFairy.jpg"
     );
-  };
+    img.set({
+      // scaleX: editor.canvas.width / img.width,
+      // scaleY: editor.canvas.height / img.height,
+      scaleX: 0.3,
+      scaleY: 0.3,
+    })
+    editor.canvas.backgroundImage = img;
+    // await fabric.FabricImage.fromURL(
+    //   "https://thegraphicsfairy.com/wp-content/uploads/2019/02/Anatomical-Heart-Illustration-Black-GraphicsFairy.jpg",
+    //   (image) => {
+    //     // Set the background image directly
+    //     console.log("background added");
+    //     editor.canvas.backgroundImage = image;
+
+    //     // Ensure the image is scaled to fit the canvas if necessary
+    //     image.scaleToWidth(editor.canvas.width);
+    //     image.scaleToHeight(editor.canvas.height);
+
+    //     // Render the canvas
+    //     editor.canvas.requestRenderAll();
+    //     console.log("background added");
+    //   }
+    // );
+  }
 
   const fromSvg = () => {
     fabric.loadSVGFromString(
@@ -115,112 +134,138 @@ export default function useFabric() {
     </g>
     </svg>`,
       (objects, options) => {
-        editor.canvas._objects.splice(0, editor.canvas._objects.length);
-        editor.canvas.backgroundImage = objects[0];
-        const newObj = objects.filter((_, index) => index !== 0);
+        editor.canvas._objects.splice(0, editor.canvas._objects.length)
+        editor.canvas.backgroundImage = objects[0]
+        const newObj = objects.filter((_, index) => index !== 0)
         newObj.forEach((object) => {
-          editor.canvas.add(object);
-        });
+          editor.canvas.add(object)
+        })
 
-        editor.canvas.renderAll();
+        editor.canvas.renderAll()
       }
-    );
-  };
+    )
+  }
 
+  //* Init canvas
   useEffect(() => {
     if (!editor || !fabric) {
-      return;
+      return
     }
-    editor.canvas.setDimensions({width:250, height:500});
-
-
-    addBackground();
-    editor.canvas.renderAll();
-  }, [editor?.canvas.backgroundImage]);
+    editor.canvas.setDimensions(dimension)
+    // addBackground();
+    editor.canvas.renderAll()
+  }, [addBackground, editor?.canvas.backgroundImage])
 
   const toggleSize = () => {
     editor.canvas.freeDrawingBrush.width === 12
       ? (editor.canvas.freeDrawingBrush.width = 5)
-      : (editor.canvas.freeDrawingBrush.width = 12);
-  };
+      : (editor.canvas.freeDrawingBrush.width = 12)
+  }
 
   useEffect(() => {
     if (!editor || !fabric) {
-      return;
+      return
     }
-    editor.canvas.freeDrawingBrush.color = color;
-    editor.setStrokeColor(color);
-  }, [color]);
+    editor.canvas.freeDrawingBrush.color = color
+    editor.setStrokeColor(color)
+  }, [color])
 
   const toggleDraw = () => {
-    editor.canvas.isDrawingMode = !editor.canvas.isDrawingMode;
-  };
+    editor.canvas.isDrawingMode = !editor.canvas.isDrawingMode
+  }
   const undo = () => {
     if (editor.canvas._objects.length > 0) {
-      history.push(editor.canvas._objects.pop());
+      history.push(editor.canvas._objects.pop())
     }
-    editor.canvas.renderAll();
-  };
+    editor.canvas.renderAll()
+  }
   const redo = () => {
     if (history.length > 0) {
-      editor.canvas.add(history.pop());
+      editor.canvas.add(history.pop())
     }
-  };
+  }
+
+  const importPdf = async (pdfData) => {
+    const pdfjsLib = window["pdfjs-dist/build/pdf"]
+    pdfData = pdfData instanceof Blob ? await readBlob(pdfData) : pdfData
+    const data = atob(
+      pdfData.startsWith(Base64Prefix)
+        ? pdfData.substring(Base64Prefix.length)
+        : pdfData
+    )
+    const loadingTask = pdfjsLib.getDocument({ data })
+    return loadingTask.promise.then((pdf) => {
+      const numPages = pdf.numPages
+      return new Array(numPages).fill(0).map((__, i) => {
+        const pageNumber = i + 1
+        return pdf.getPage(pageNumber).then((page) => {
+          const viewport = page.getViewport({ scale: window.devicePixelRatio })
+          const canvas = document.createElement("canvas")
+          const context = canvas.getContext("2d")
+          canvas.height = viewport.height
+          canvas.width = viewport.width
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          }
+          const renderTask = page.render(renderContext)
+          return renderTask.promise.then(() => canvas)
+        })
+      })
+    })
+  }
 
   const clear = () => {
-    editor.canvas._objects.splice(0, editor.canvas._objects.length);
-    history.splice(0, history.length);
-    editor.canvas.renderAll();
-  };
+    editor.canvas._objects.splice(0, editor.canvas._objects.length)
+    history.splice(0, history.length)
+    editor.canvas.renderAll()
+  }
 
   const removeSelectedObject = () => {
-    editor.canvas.remove(editor.canvas.getActiveObject());
-  };
+    editor.canvas.remove(editor.canvas.getActiveObject())
+  }
 
   const onAddCircle = () => {
-    editor.addCircle();
-    editor.addLine();
-  };
+    editor.addCircle()
+    // editor.addLine();
+  }
   const onAddRectangle = () => {
-    editor.addRectangle();
-  };
+    editor.addRectangle()
+  }
   const addText = () => {
-    editor.addText("inset text");
-  };
+    editor.addText("inset text")
+  }
 
   const exportSVG = () => {
-    const svg = editor.canvas.toSVG();
-    console.info(svg);
-  };
+    const svg = editor.canvas.toSVG()
+    console.info(svg)
+  }
 
+  const enablePanning = (canvas) => {
+    canvas.on("mouse:down", (event) => {
+      canvas.isDragging = true
+      canvas.selection = false // Tắt chế độ chọn đối tượng
+      canvas.lastPosX = event.e.clientX
+      canvas.lastPosY = event.e.clientY
+    })
 
+    canvas.on("mouse:move", (event) => {
+      if (canvas.isDragging) {
+        const e = event.e
+        const vpt = canvas.viewportTransform
+        vpt[4] += e.clientX - canvas.lastPosX // Di chuyển theo trục X
+        vpt[5] += e.clientY - canvas.lastPosY // Di chuyển theo trục Y
+        canvas.requestRenderAll()
+        canvas.lastPosX = e.clientX
+        canvas.lastPosY = e.clientY
+      }
+    })
 
-const enablePanning = (canvas) => {
-  canvas.on("mouse:down", (event) => {
-    canvas.isDragging = true;
-    canvas.selection = false; // Tắt chế độ chọn đối tượng
-    canvas.lastPosX = event.e.clientX;
-    canvas.lastPosY = event.e.clientY;
-  });
-
-  canvas.on("mouse:move", (event) => {
-    if (canvas.isDragging) {
-      const e = event.e;
-      const vpt = canvas.viewportTransform;
-      vpt[4] += e.clientX - canvas.lastPosX; // Di chuyển theo trục X
-      vpt[5] += e.clientY - canvas.lastPosY; // Di chuyển theo trục Y
-      canvas.requestRenderAll();
-      canvas.lastPosX = e.clientX;
-      canvas.lastPosY = e.clientY;
-    }
-  });
-
-  canvas.on("mouse:up", () => {
-    canvas.isDragging = false;
-    canvas.selection = true; // Bật lại chế độ chọn đối tượng
-  });
-};
-
+    canvas.on("mouse:up", () => {
+      canvas.isDragging = false
+      canvas.selection = true // Bật lại chế độ chọn đối tượng
+    })
+  }
 
   return {
     editor,
@@ -240,7 +285,8 @@ const enablePanning = (canvas) => {
     exportSVG,
     fromSvg,
     cropImage,
-    enablePanning
+    enablePanning,
+    setDimension,
   }
 
   // return (

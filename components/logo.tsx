@@ -8,7 +8,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className = "", size = 75 }) => {
   return (
     <Image
-      src="/images/banner/logo.jpg"
+      src="/images/banner/logo.png"
       alt="Logo"
       width={size}
       height={size}

@@ -32,6 +32,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".contentlayer/generated"
-  ],
+, "app/(workspace)/editor/fabric/custom/import-pdf.js"  ],
   "exclude": ["node_modules"]
 }
