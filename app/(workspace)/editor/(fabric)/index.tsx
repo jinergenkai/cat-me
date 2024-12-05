@@ -19,8 +19,10 @@ const FabricJSCanvas = ({ className, onReady, height, width}: Props) => {
     const canvas = new fabric.Canvas(canvasEl.current ?? undefined)
     const setCurrentDimensions = () => {
       canvas.setDimensions({
-        height: height || canvasElParent.current?.clientHeight || 0,
-        width: width || canvasElParent.current?.clientWidth || 0
+        // height: height || canvasElParent.current?.clientHeight || 0,
+        // width: width || canvasElParent.current?.clientWidth || 0
+        height: height || window.innerHeight || 0,
+        width: width || window.innerWidth || 0,
       })
       canvas.renderAll()
     }

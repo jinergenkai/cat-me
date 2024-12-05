@@ -86,7 +86,7 @@ export default function MemeEditor() {
         {/* <ChooseImageDialog /> */}
         {/* <Button onClick={() => router.push("/editor/test")}>Toggle Draw</Button> */}
         {/* <FabricJSCanvas onReady={onReady} /> */}
-        <FabricJSCanvas className="bg-white" onReady={onReady} height={windowHeight} />
+        <FabricJSCanvas className="bg-white" onReady={onReady} />
         {/* <div className="h-[1000px]"></div> */}
       </main>
 

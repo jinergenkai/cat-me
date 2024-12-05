@@ -6,13 +6,14 @@ export function useWindowHeight() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = () => setHeight(window.innerHeight);
+      // console.log("Height: ", window.innerHeight);
       
       handleResize(); // Lấy giá trị ban đầu
       window.addEventListener("resize", handleResize);
       
       return () => window.removeEventListener("resize", handleResize);
     }
-  }, []);
+  });
 
   return height;
 }
