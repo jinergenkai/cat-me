@@ -5,19 +5,23 @@ import { useFabricJSEditor, FabricJSEditor, FabricJSEditorHook } from './editor'
 export interface Props {
   className?: string
   onReady?: (canvas: fabric.Canvas) => void
+  height?: number
+  width?: number
 }
 
 /**
  * Fabric canvas as component
  */
-const FabricJSCanvas = ({ className, onReady }: Props) => {
+const FabricJSCanvas = ({ className, onReady, height, width}: Props) => {
   const canvasEl = useRef<HTMLCanvasElement>(null)
   const canvasElParent = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasEl.current ?? undefined)
     const setCurrentDimensions = () => {
-      canvas.setHeight(canvasElParent.current?.clientHeight || 0)
-      canvas.setWidth(canvasElParent.current?.clientWidth || 0)
+      canvas.setDimensions({
+        height: height || canvasElParent.current?.clientHeight || 0,
+        width: width || canvasElParent.current?.clientWidth || 0
+      })
       canvas.renderAll()
     }
     const resizeCanvas = () => {

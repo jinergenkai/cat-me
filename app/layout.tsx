@@ -72,6 +72,7 @@ export const metadata = {
     apple: "/images/banner/logo.png",
   },
   // manifest: `${siteConfig.url}/site.webmanifest`,
+  viewport: "width=device-width, initial-scale=1.0, viewport-fit=cover",
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
@@ -85,7 +86,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontHeading.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
           <Analytics />
           <Toaster />

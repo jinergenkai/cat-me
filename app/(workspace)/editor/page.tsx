@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "components/ui/button";
 import { cn } from "lib/utils";
 import { Type } from 'lucide-react';
@@ -12,16 +12,15 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { InputEventAttacher } from "./fabric/custom/import-pdf";
 import { Input } from "@/components/ui/input";
+import "./styles.css";
+import useViewportHeight from "./view-port";
 
 export default function MemeEditor() {
   const { toast } = useToast();
 
   const onFeatureUnderDevelopment = () => {
     console.log("Feature under development");
-    toast({
-      // className: cn('fixed right-0 top-16 z-[10000] flex  md:max-w-[420px]'),
-      description: "Tính năng đang phát triển",
-    });
+    toast({ description: "Tính năng đang phát triển", });
   }
 
   // List of tools
@@ -33,7 +32,7 @@ export default function MemeEditor() {
       name: "Thêm ảnh", icon: Icons.image,
       comp: () => (<>
         <div className="relative inline-block">
-          <Button className="btn rounded bg-blue-500 px-4 py-2 text-white shadow hover:bg-blue-600 focus:outline-none">
+          <Button variant={"ghost"} className="">
             Thêm ảnh
           </Button>
           <input key={0} id="picture" type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 cursor-pointer opacity-0" />
@@ -45,7 +44,11 @@ export default function MemeEditor() {
     { name: "Gắn chữ", icon: Icons.type, func: addText },
     { name: "Gắn nhãn", icon: Icons.sticker, func: onAddCircle },
     // { name: "Add Filter", icon: null },
-    { name: "Cắt", icon: Icons.cut, func: onFeatureUnderDevelopment },
+    {
+      name: "Cắt", icon: Icons.cut, func: () => {
+        editor?.canvas.setDimensions({ width: window.innerHeight/2, height: window.innerWidth/2 });
+      }
+    },
     // { name: "Rotate", icon: "↩️" },
     { name: "Chỉnh khung", icon: Icons.crop, func: onFeatureUnderDevelopment },
     { name: "Xoay", icon: Icons.rotate, onFeatureUnderDevelopment },
@@ -65,15 +68,23 @@ export default function MemeEditor() {
 
   const router = useRouter();
 
+  // useViewportHeight();
+
 
   return (
-    <div>
+    <div className="">
+      {/* <div className="module__item">20%</div>
+  <div className="module__item">40%</div>
+  <div className="module__item">60%</div>
+  <div className="module__item">80%</div>
+  <div className="module__item">100%</div> */}
       {/* Main Canvas */}
       <main className="h-[50%] bg-gray-50 p-4">
 
         {/* <ChooseImageDialog /> */}
         {/* <Button onClick={() => router.push("/editor/test")}>Toggle Draw</Button> */}
-        <FabricJSCanvas className="h-[50%] w-full" onReady={onReady} />
+        {/* <FabricJSCanvas onReady={onReady} /> */}
+        <FabricJSCanvas className="bg-white" onReady={onReady} height={window.innerHeight} />
         {/* <div className="h-[1000px]"></div> */}
       </main>
 
@@ -82,7 +93,7 @@ export default function MemeEditor() {
 
       {/* Fixed Toolbar at the Bottom */}
       <div className="fixed inset-x-0 bottom-0 m-4 overflow-x-auto rounded-full bg-white p-2 dark:bg-black">
-        <div className="flex">
+        <div className="flex ">
           {tools.map((tool, index) => {
             if (tool.comp) return tool.comp();
             return (

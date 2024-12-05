@@ -13,7 +13,7 @@ export default function useFabric() {
   const history = []
   const [color, setColor] = useState("#35363a")
   const [cropImage, setCropImage] = useState(true)
-  const [dimension, setDimension] = useState({ width: 400, height: 400 })
+  // const [dimension, setDimension] = useState({ width: 400, height: 40 })
 
   useEffect(() => {
     if (!editor || !fabric) {
@@ -151,7 +151,7 @@ export default function useFabric() {
     if (!editor || !fabric) {
       return
     }
-    editor.canvas.setDimensions(dimension)
+    // editor.canvas.setDimensions(dimension)
     // addBackground();
     editor.canvas.renderAll()
   }, [addBackground, editor?.canvas.backgroundImage])
@@ -202,8 +202,8 @@ export default function useFabric() {
           const viewport = page.getViewport({ scale: window.devicePixelRatio })
           const canvas = document.createElement("canvas")
           const context = canvas.getContext("2d")
-          canvas.height = viewport.height
-          canvas.width = viewport.width
+          // canvas.height = viewport.height
+          // canvas.width = viewport.width
           const renderContext = {
             canvasContext: context,
             viewport: viewport,
@@ -286,7 +286,7 @@ export default function useFabric() {
     fromSvg,
     cropImage,
     enablePanning,
-    setDimension,
+    // setDimension,
   }
 
   // return (
