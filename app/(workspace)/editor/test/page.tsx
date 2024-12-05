@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react'
-import { FabricJSCanvas, useFabricJSEditor } from '../fabric'
+import { FabricJSCanvas, useFabricJSEditor } from '../(fabric)'
 
 function App() {
   const { selectedObjects, editor, onReady } = useFabricJSEditor({

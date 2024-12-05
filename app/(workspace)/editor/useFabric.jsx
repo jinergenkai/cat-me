@@ -5,7 +5,7 @@ import * as fabric from "fabric"
 
 import { Button } from "@/components/ui/button"
 
-import { FabricJSCanvas, useFabricJSEditor } from "./fabric"
+import { FabricJSCanvas, useFabricJSEditor } from "./(fabric)"
 
 export default function useFabric() {
   const { editor, onReady } = useFabricJSEditor()

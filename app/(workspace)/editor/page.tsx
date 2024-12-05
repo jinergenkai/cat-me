@@ -7,13 +7,13 @@ import { Type } from 'lucide-react';
 import { Icons } from "@/components/icons";
 import { ChooseImageDialog } from "./dialog";
 import FabricCanvas from "./useFabric";
-import { FabricJSCanvas } from "./fabric";
+import { FabricJSCanvas } from "./(fabric)";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { InputEventAttacher } from "./fabric/custom/import-pdf";
+import { InputEventAttacher } from "./(fabric)/custom/import-pdf";
 import { Input } from "@/components/ui/input";
 import "./styles.css";
-import useViewportHeight from "./view-port";
+import { useWindowHeight } from "./use-window-height";
 
 export default function MemeEditor() {
   const { toast } = useToast();
@@ -22,6 +22,8 @@ export default function MemeEditor() {
     console.log("Feature under development");
     toast({ description: "Tính năng đang phát triển", });
   }
+
+  const windowHeight = useWindowHeight();
 
   // List of tools
   const { onReady, onAddCircle, onAddRectangle, addText, toggleDraw, clear,
@@ -46,7 +48,7 @@ export default function MemeEditor() {
     // { name: "Add Filter", icon: null },
     {
       name: "Cắt", icon: Icons.cut, func: () => {
-        editor?.canvas.setDimensions({ width: window.innerHeight/2, height: window.innerWidth/2 });
+        editor?.canvas.setDimensions({ height: windowHeight});
       }
     },
     // { name: "Rotate", icon: "↩️" },
@@ -84,7 +86,7 @@ export default function MemeEditor() {
         {/* <ChooseImageDialog /> */}
         {/* <Button onClick={() => router.push("/editor/test")}>Toggle Draw</Button> */}
         {/* <FabricJSCanvas onReady={onReady} /> */}
-        <FabricJSCanvas className="bg-white" onReady={onReady} height={window.innerHeight} />
+        <FabricJSCanvas className="bg-white" onReady={onReady} height={windowHeight} />
         {/* <div className="h-[1000px]"></div> */}
       </main>
 
